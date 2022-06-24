@@ -1,0 +1,64 @@
+﻿@{
+	Layout = "_Layout";
+	ViewData["Title"] = "Home Page";
+}
+
+@using SphinxQueryCore.Net
+	@model IndexModel
+
+	<div id="main" class="container-fluide">
+		<div class="row row-col-2 justify-content-center gx-3">
+			<div class="col-2">
+					@if (Model.Exception != null)
+					{
+						<div class="alert alert-danger" role="alert">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span class="sr-only">Error:</span>
+							@(" " + Model.Exception?.Message)
+						</div>
+					}
+
+					@await Html.PartialAsync("TableControl", Model.Indexes)
+
+			</div>
+			<div class="col-9">
+			@using (Html.BeginForm())
+			{
+				<div class="row justify-content-center mb-2">
+					<div class="col">
+						<div class="form-floating">
+							@Html.TextBoxFor(m => m.Host, new { id="floatingHost", @class = "form-control", @placeholder = "host" })
+							<label for="floatingHost">Host</label>
+						</div>
+					</div>
+					<div class="col">
+						<div class="form-floating">
+							@Html.TextBoxFor(m => m.Port, new { id="floatingPort", @class = "form-control", @placeholder = "port" })
+							<label for="floatingPort">Port</label>
+						</div>
+					</div>
+				</div>
+				<div class="row justify-content-center">
+					<div class="col">
+						<div class="form-floating mb-2">
+							@Html.TextBoxFor(m => m.Statement, new {id="floatingQuery",  @class = "form-control", @placeholder = "enter query statement" })
+							<label for="floatingQuery">Query text</label>
+							<input hidden type="submit" value="Отправить" />
+						</div>
+					</div>
+				</div>
+			}
+			</div>
+		</div>
+		<div class="row row-col-2 justify-content-center">
+			<div class="col col-md-auto">
+				@await Html.PartialAsync("TableControl", Model.Rows)
+			</div>
+			<div class="col-3">
+				<div class="mb-2">
+					@await Html.PartialAsync("TableControl", Model.Meta)
+				</div>
+				@await Html.PartialAsync("TableControl", Model.Status)
+			</div>
+		</div>
+	</div>
